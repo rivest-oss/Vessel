@@ -44,6 +44,7 @@ namespace vessel {
 		public:
 			ThingProperties properties;
 			
+			Scene(void);	// do not use
 			Scene(std::string id);
 			~Scene(void);
 

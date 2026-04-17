@@ -20,7 +20,7 @@
 #include "misc/rtconfig.hpp"
 #include "Ox/include/nuclei.hpp"
 
-#include "engine/scene.hpp"
+#include "engine/engine.hpp"
 
 namespace Raylib {
 	#include <raylib.h>
@@ -29,8 +29,6 @@ namespace Raylib {
 #if defined(PLATFORM_WEB)
 	#include <emscripten/emscripten.h>
 #endif
-
-vessel::Scene scene("myScene");
 
 int game_init(void) {
 	Raylib::SetTargetFPS(60);
@@ -42,10 +40,17 @@ int game_init(void) {
 	Raylib::InitAudioDevice();
 	while(Raylib::IsAudioDeviceReady() == false) {};
 
+	if(vessel::engine::init() != 0)
+		return 1;
+
+	vessel::engine::create_scene("myScene");
+
 	return 0;
 };
 
 void game_deinit(void) {
+	vessel::engine::deinit();
+
 	Raylib::CloseAudioDevice();
 	Raylib::CloseWindow();
 };
@@ -53,7 +58,7 @@ void game_deinit(void) {
 void game_update(double dt) {
 	(void)dt;
 	
-	scene.update(dt);
+	vessel::engine::update(dt);
 };
 
 void game_draw(double dt) {
@@ -63,7 +68,7 @@ void game_draw(double dt) {
 	// [TODO]
 	(void)dt;
 
-	scene.draw(dt);
+	vessel::engine::draw(dt);
 	
 	Raylib::EndDrawing();
 	Raylib::SwapScreenBuffer();
@@ -84,7 +89,7 @@ int main(int argc, const char **argv) {
 		game_deinit();
 		return 1;
 	}
-	
+
 	#ifdef PLATFORM_WEB
 		emscripten_set_main_loop(game_loop, 0, 1);
 	#else

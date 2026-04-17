@@ -20,6 +20,10 @@
 #include "../Ox/include/nuclei.hpp"
 
 namespace vessel {
+	Scene::Scene(void) {
+		_id = "$_DEFAULT_ID_";
+	};
+
 	Scene::Scene(std::string id) {
 		ox_assert(id.size() >= 1, "invalid 'id' value");
 		_id = id;

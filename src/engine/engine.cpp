@@ -77,7 +77,7 @@ namespace vessel {
 			return _registered_scenes_map[_curr_scene];
 		};
 
-		void transition_scene(std::string to) {
+		void transition_to_scene(std::string to) {
 			ox_assert(to.size() >= 1, "invalid current scene ID");
 			ox_assert(_registered_scenes_map.find(to) != _registered_scenes_map.end(), "specified scene is not registered");
 			_curr_scene = to;

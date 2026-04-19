@@ -21,6 +21,7 @@
 #include "Ox/include/nuclei.hpp"
 
 #include "engine/engine.hpp"
+#include "engine/text-node.hpp"
 
 namespace Raylib {
 	#include <raylib.h>
@@ -43,7 +44,12 @@ int game_init(void) {
 	if(vessel::engine::init() != 0)
 		return 1;
 
-	vessel::engine::create_scene("myScene");
+	vessel::Scene &scene = vessel::engine::create_scene("myScene");
+	vessel::Node node = vessel::create_text_node("myText");
+
+	scene.add_node(node);
+
+	vessel::engine::transition_to_scene(scene.get_id());
 
 	return 0;
 };

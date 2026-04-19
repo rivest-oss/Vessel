@@ -18,20 +18,8 @@
 
 #pragma once
 #include "scene.hpp"
+#include <string>
 
 namespace vessel {
-	namespace engine {
-		int init(void);
-		void deinit(void);
-
-		void update(float dt);
-		void draw(float dt);
-
-		Scene &create_scene(std::string id);
-		Scene &get_scene_by_id(std::string id);
-		void remove_scene(std::string id);
-
-		Scene &get_current_scene(void);
-		void transition_to_scene(std::string to);
-	};
+	Node create_text_node(std::string id);
 };

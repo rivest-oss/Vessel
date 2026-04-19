@@ -1,0 +1,4 @@
+CompileFlags:
+	Add: [-xc++, -std=c++17, -Wall, -Wextra, -Wpedantic]
+	Compiler: c++
+

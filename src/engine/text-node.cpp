@@ -16,22 +16,41 @@
 ** "Vessel". If not, see <https://www.gnu.org/licenses/>. 
 **/
 
-#pragma once
-#include "scene.hpp"
+#include "text-node.hpp"
+#include "rl.hpp"
 
 namespace vessel {
-	namespace engine {
-		int init(void);
-		void deinit(void);
+	void _text_node_update(Node &node, Scene &scene, float dt) {
+		(void)node;
+		(void)scene;
+		(void)dt;
+		// yup
+	};
 
-		void update(float dt);
-		void draw(float dt);
+	void _text_node_draw(Node &node, Scene &scene, float dt) {
+		(void)node;
+		(void)scene;
+		(void)dt;
 
-		Scene &create_scene(std::string id);
-		Scene &get_scene_by_id(std::string id);
-		void remove_scene(std::string id);
+		std::string text = node.properties.get_string("text", "");
 
-		Scene &get_current_scene(void);
-		void transition_to_scene(std::string to);
+		Raylib::DrawText(
+			"Hello, world!",
+			16,
+			16,
+			32,
+			Raylib::WHITE
+		);
+	};
+
+	Node create_text_node(std::string id) {
+		ox_assert(id.size() >= 1, "invalid 'id' value");
+		Node node(
+			id,
+			_text_node_update,
+			_text_node_draw
+		);
+
+		return node;
 	};
 };

@@ -18,8 +18,47 @@
 
 #include "scene.hpp"
 #include "../Ox/include/nuclei.hpp"
+#include "../io/log.hpp"
 
 namespace vessel {
+	Node::Node(void) {
+		_id = "$_INVALID_NODE";
+
+		_update = [](Node &node, Scene &scene, float dt) -> void {
+			ox_assert(false, "empty 'update' function called");
+		};
+
+		_draw = [](Node &node, Scene &scene, float dt) -> void {
+			ox_assert(false, "empty 'draw' function called");
+		};
+	};
+
+	Node::Node(std::string id, scene_fn_t update_fn, scene_fn_t draw_fn) {
+		ox_assert(id.size() >= 1, "invalid 'id' value");
+		ox_assert(update_fn != nullptr, "invalid 'update_fn' value");
+		ox_assert(draw_fn != nullptr, "invalid 'draw_fn' value");
+
+		_id = id;
+		_update = update_fn;
+		_draw = draw_fn;
+	};
+
+	Node::~Node(void) {
+		// yup
+	};
+
+	std::string Node::get_id(void) {
+		return _id;
+	};
+
+	void Node::update(Scene &scene, float dt) {
+		_update(*this, scene, dt);
+	};
+
+	void Node::draw(Scene &scene, float dt) {
+		_draw(*this, scene, dt);
+	};
+
 	Scene::Scene(void) {
 		_id = "$_DEFAULT_ID_";
 	};
@@ -31,13 +70,14 @@ namespace vessel {
 
 	Scene::~Scene(void) {
 		// ... huh?
+		log_debug("DESTROY SCENE\n");
 	};
 
 	std::string Scene::get_id(void) {
 		return _id;
 	};
 
-	void Scene::add_node(BaseNode &node) {
+	void Scene::add_node(Node &node) {
 		ox_assert(node.get_id().size() >= 1, "invalid value for node 'id'");
 		ox_assert(_nodes.find(node.get_id()) == _nodes.end(), "'id' value hash already in nodes vector, maybe duplicated add_node or hashing error?");
 
@@ -59,16 +99,19 @@ namespace vessel {
 
 	void Scene::update(float dt) {
 		ox_assert(is_valid_float(dt), "'dt' is not a valid number");
-		for(auto &npair : _nodes)
+		
+		for(auto &npair : _nodes) {
 			npair.second.update(*this, dt);
+		};
 	};
 
 	void Scene::draw(float dt) {
 		Raylib::BeginMode2D(_camera);
 
 		ox_assert(is_valid_float(dt), "'dt' is not a valid number");
-		for(auto &npair : _nodes)
+		for(auto &npair : _nodes) {
 			npair.second.draw(*this, dt);
+		};
 
 		Raylib::EndMode2D();
 	};

@@ -25,20 +25,31 @@
 namespace vessel {
 	class Scene;
 
-	class BaseNode {
+	class Node {
 		public:
+			typedef void (*scene_fn_t)(Node &node, Scene &scene, float dt);
+
+		private:
+			std::string _id;
+			scene_fn_t _update, _draw;
+
+		public:
+			Node(void);	// do not use
+			Node(std::string id, scene_fn_t update_fn, scene_fn_t draw_fn);
+			~Node(void);
+
 			ThingProperties properties;
 
-			virtual std::string get_id(void) = 0;
+			std::string get_id(void);
 
-			virtual void update(Scene &scene, float dt) = 0;
-			virtual void draw(Scene &scene, float dt) = 0;
+			void update(Scene &scene, float dt);
+			void draw(Scene &scene, float dt);
 	};
 
 	class Scene {
 		private:
 			std::string _id;
-			std::unordered_map<std::string, BaseNode &, HashString> _nodes;
+			std::unordered_map<std::string, Node &, HashString> _nodes;
 			Raylib::Camera2D _camera;
 
 		public:
@@ -50,7 +61,7 @@ namespace vessel {
 
 			std::string get_id(void);
 
-			void add_node(BaseNode &node);
+			void add_node(Node &node);
 			void remove_node(std::string id);
 
 			void set_camera(Raylib::Camera2D camera);

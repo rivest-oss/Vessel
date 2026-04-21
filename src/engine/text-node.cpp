@@ -36,8 +36,8 @@ namespace vessel {
 
 		Raylib::DrawText(
 			"Hello, world!",
-			16,
-			16,
+			0,
+			0,
 			32,
 			Raylib::WHITE
 		);

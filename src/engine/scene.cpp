@@ -18,17 +18,18 @@
 
 #include "scene.hpp"
 #include "../Ox/include/nuclei.hpp"
-#include "../io/log.hpp"
 
 namespace vessel {
 	Node::Node(void) {
 		_id = "$_INVALID_NODE";
 
 		_update = [](Node &node, Scene &scene, float dt) -> void {
+			(void)node; (void)scene; (void)dt;
 			ox_assert(false, "empty 'update' function called");
 		};
 
 		_draw = [](Node &node, Scene &scene, float dt) -> void {
+			(void)node; (void)scene; (void)dt;
 			ox_assert(false, "empty 'draw' function called");
 		};
 	};
@@ -44,7 +45,14 @@ namespace vessel {
 	};
 
 	Node::~Node(void) {
-		// yup
+		_id.clear();
+
+		_update = [](Node &node, Scene &scene, float dt) -> void {
+			(void)node; (void)scene; (void)dt;
+			ox_assert(false, "this shouldn't happen");
+		};
+
+		_draw = _update;
 	};
 
 	std::string Node::get_id(void) {
@@ -70,18 +78,19 @@ namespace vessel {
 
 	Scene::~Scene(void) {
 		// ... huh?
-		log_debug("DESTROY SCENE\n");
 	};
 
 	std::string Scene::get_id(void) {
 		return _id;
 	};
 
-	void Scene::add_node(Node &node) {
+	Node &Scene::add_node(Node node) {
 		ox_assert(node.get_id().size() >= 1, "invalid value for node 'id'");
 		ox_assert(_nodes.find(node.get_id()) == _nodes.end(), "'id' value hash already in nodes vector, maybe duplicated add_node or hashing error?");
 
 		_nodes.insert_or_assign(node.get_id(), node);
+
+		return _nodes[node.get_id()];
 	};
 
 	void Scene::remove_node(std::string id) {

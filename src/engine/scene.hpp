@@ -49,7 +49,7 @@ namespace vessel {
 	class Scene {
 		private:
 			std::string _id;
-			std::unordered_map<std::string, Node &, HashString> _nodes;
+			std::unordered_map<std::string, Node, HashString> _nodes;
 			Raylib::Camera2D _camera;
 
 		public:
@@ -61,7 +61,7 @@ namespace vessel {
 
 			std::string get_id(void);
 
-			void add_node(Node &node);
+			Node &add_node(Node mortal_node);
 			void remove_node(std::string id);
 
 			void set_camera(Raylib::Camera2D camera);

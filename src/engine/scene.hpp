@@ -50,7 +50,18 @@ namespace vessel {
 		private:
 			std::string _id;
 			std::unordered_map<std::string, Node, HashString> _nodes;
-			Raylib::Camera2D _camera;
+			Raylib::Camera2D _camera {
+				Raylib::Vector2 {
+					0.f,
+					0.f,
+				},
+				Raylib::Vector2 {
+					0.f,
+					0.f,
+				},
+				0.f,
+				1.f,
+			};
 
 		public:
 			ThingProperties properties;

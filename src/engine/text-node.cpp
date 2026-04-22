@@ -32,13 +32,14 @@ namespace vessel {
 		(void)scene;
 		(void)dt;
 
-		std::string text = node.properties.get_string("text", "");
+		std::string text = node.properties.get_string("text", "<MISSING TEXT>");
+		float font_size = node.properties.get_float("fontSize", 16.f);
 
 		Raylib::DrawText(
-			"Hello, world!",
+			text.c_str(),
 			0,
 			0,
-			32,
+			font_size,
 			Raylib::WHITE
 		);
 	};
